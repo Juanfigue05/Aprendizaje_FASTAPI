@@ -20,9 +20,6 @@ CREATE TABLE usuario(
 );
 
 
--- ___________________________________________________________
---____________________BASE DE DATOS DE DRAWDB_________________
-
 CREATE TABLE IF NOT EXISTS `users` (
 	`id_user` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
 	`nombre_completo` VARCHAR(70),
