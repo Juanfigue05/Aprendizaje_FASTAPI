@@ -1,0 +1,37 @@
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from app.router import usuarios as users
+from app.router import auth 
+from app.router import cargar_archivos as cargar
+from app.router import programas
+
+
+app = FastAPI()
+
+# Incluir en el objeto app los routers
+app.include_router(users.router, prefix="/usuario", tags=["Servicios usuarios"])
+app.include_router(auth.router, prefix="/access", tags=["Servicios Login"])
+app.include_router(cargar.router, prefix="/cargar", tags=["Cargar archivos Excel PE04"])
+app.include_router(programas.router)
+
+#añadir la carpeta static para servir archivos
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Configuración de CORS para permitir todas las solicitudes desde cualquier origen
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permitir solicitudes desde cualquier origen
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],  # Permitir estos métodos HTTP
+    allow_headers=["*"],  # Permitir cualquier encabezado en las solicitudes
+)
+
+@app.get("/")
+def read_root():
+    return {
+                "message": "Todo funciona correctamente",
+                "autor": "ADSO 2925888"
+            }
+
