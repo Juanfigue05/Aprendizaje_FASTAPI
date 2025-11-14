@@ -33,3 +33,19 @@ def upload_url_pdf(db: Session, cod: int, url:str) -> bool:
         logger.error(f"Error al actualizar usuario: {e}")
         raise Exception("Error de base de datos al actualizar el usuario")
 
+
+def get_all_programs(db: Session):
+    try:
+        query = text("""
+            SELECT programas_formacion.cod_programa, programas_formacion.version, 
+                     programas_formacion.nombre, programas_formacion.nivel, programas_formacion.id_red,
+                     programas_formacion.tiempo_duracion,programas_formacion.unidad_medida,programas_formacion.estado,programas_formacion.url_pdf
+            FROM programas_formacion
+        """)
+
+        result = db.execute(query).mappings().all()
+        return result
+    
+    except SQLAlchemyError as e:
+        logger.error(f"Error al bucar programas por id: {e}")
+        raise Exception("Error de base de datos al buscar el usuario")

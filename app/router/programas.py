@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from app.utils.utils import save_uploaded_document
 from sqlalchemy.orm import Session
@@ -5,7 +6,7 @@ from app.router.dependencias import get_current_user
 from app.schemas.usuarios import RetornoUsuario
 from core.database import get_db
 from sqlalchemy.exc import SQLAlchemyError
-from app.crud.programas import get_program_by_code, upload_url_pdf 
+from app.crud.programas import get_program_by_code, upload_url_pdf ,get_all_programs
 
 
 router = APIRouter(
@@ -43,3 +44,15 @@ def upload_document(
     except Exception as e:
         # Captura cualquier otro error inesperado
         raise HTTPException(status_code=500, detail=f"Error interno aqui: {str(e)}")
+
+
+
+@router.get("/obtener-todos-programas}", status_code=status.HTTP_200_OK, response_model=List[RetornoUsuario])
+def get_all(db: Session = Depends(get_db)):
+    try:
+        users = get_all_programs(db)
+        if users is None:
+            raise HTTPException(status_code=404, detail="Usuarios no encontrados")
+        return users
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=str(e))
