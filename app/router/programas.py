@@ -47,7 +47,7 @@ def upload_document(
 
 
 
-@router.get("/obtener-todos-programas}", status_code=status.HTTP_200_OK, response_model=List[RetornoUsuario])
+@router.get("/obtener-todos-programas}", response_model=List[RetornoUsuario])
 def get_all(db: Session = Depends(get_db)):
     try:
         users = get_all_programs(db)
