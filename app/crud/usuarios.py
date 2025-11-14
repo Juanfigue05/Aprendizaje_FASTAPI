@@ -159,13 +159,14 @@ def get_user_by_email_security(db: Session, un_correo:str):
     try:
         query = text("""
             SELECT usuario.id_usuario, usuario.nombre_completo, 
-                   usuario.num_documento, usuario.contra_encript, usuario.correo, usuario.id_rol, 
+                   usuario.num_documento, usuario.contra_encript, 
+                     usuario.correo, usuario.id_rol, 
                    usuario.estado, rol.nombre_rol
             FROM usuario
             INNER JOIN rol ON usuario.id_rol = rol.id_rol
             WHERE usuario.correo = :email
         """)
-
+        print("despues de la consulta")
         result = db.execute(query, {"email": un_correo}).mappings().first()
         return result
     

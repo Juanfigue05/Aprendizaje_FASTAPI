@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from app.schemas.programas import RetornoPrograma
 from app.utils.utils import save_uploaded_document
 from sqlalchemy.orm import Session
 from app.router.dependencias import get_current_user
@@ -47,7 +48,7 @@ def upload_document(
 
 
 
-@router.get("/obtener-todos-programas}", response_model=List[RetornoUsuario])
+@router.get("/obtener-todos-programas}", response_model=List[RetornoPrograma])
 def get_all(db: Session = Depends(get_db)):
     try:
         users = get_all_programs(db)
