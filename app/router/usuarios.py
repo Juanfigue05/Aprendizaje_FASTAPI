@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -111,5 +112,16 @@ def update_password(user: EditarPass,
             if not success:
                 raise HTTPException(status_code=400, detail="No se pudo actualizar la contraseña del usuario")
             return {"message": "Contraseña actualizada correctamente"}
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/obtener-todos}", status_code=status.HTTP_200_OK, response_model=List[RetornoUsuario])
+def get_all(db: Session = Depends(get_db)):
+    try:
+        users = crud_users.get_all_user(db)
+        if users is None:
+            raise HTTPException(status_code=404, detail="Usuarios no encontrados")
+        return users
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=str(e))
