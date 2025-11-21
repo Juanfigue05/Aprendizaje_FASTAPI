@@ -13,18 +13,17 @@ router = APIRouter()
 @router.post("/registrar", status_code=status.HTTP_201_CREATED)
 def create_user(
      user: CrearUsuario,
-    db: Session = Depends(get_db),
-    user_token : RetornoUsuario = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
     try:
-        if user_token.id_rol !=1:
-            raise HTTPException(status_code=403, detail="No tiene permisos para crear usuarios")
+        # if user_token.id_rol !=1:
+        #     raise HTTPException(status_code=403, detail="No tiene permisos para crear usuarios")
+        # else:
+        crear = crud_users.create_user(db, user)
+        if crear:
+            return {"message": "Usuario creado correctamente"}
         else:
-            crear = crud_users.create_user(db, user)
-            if crear:
-                return {"message": "Usuario creado correctamente"}
-            else:
-                return {"message": "El Usuario no pudo ser creado correctamente"}
+            return {"message": "El Usuario no pudo ser creado correctamente"}
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
